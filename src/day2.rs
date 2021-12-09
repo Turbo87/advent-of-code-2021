@@ -5,9 +5,9 @@ const INPUT: &str = include_str!("../inputs/input-2.txt");
 
 #[derive(Debug)]
 enum Action {
-    Forward(u32),
-    Down(u32),
-    Up(u32),
+    Forward(i32),
+    Down(i32),
+    Up(i32),
 }
 
 impl FromStr for Action {
@@ -47,7 +47,7 @@ pub fn run() -> anyhow::Result<()> {
     Ok(())
 }
 
-fn calc_position(input: &str) -> anyhow::Result<(u32, u32)> {
+fn calc_position(input: &str) -> anyhow::Result<(i32, i32)> {
     let mut horizontal = 0;
     let mut depth = 0;
 
@@ -66,7 +66,7 @@ fn calc_position(input: &str) -> anyhow::Result<(u32, u32)> {
     Ok((horizontal, depth))
 }
 
-fn calc_position2(input: &str) -> anyhow::Result<(u32, u32)> {
+fn calc_position2(input: &str) -> anyhow::Result<(i32, i32)> {
     let mut horizontal = 0;
     let mut depth = 0;
     let mut aim = 0;

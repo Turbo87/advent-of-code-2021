@@ -1,7 +1,9 @@
 use anyhow::anyhow;
 
+const INPUT: &str = include_str!("../inputs/input-3.txt");
+
 pub fn run() -> anyhow::Result<()> {
-    let (gamma, epsilon) = calc_rates(include_str!("../inputs/input-3.txt"))?;
+    let (gamma, epsilon) = calc_rates(INPUT)?;
     dbg!(gamma);
     dbg!(epsilon);
 
@@ -64,8 +66,10 @@ mod tests {
     use super::calc_rates;
     use claim::assert_ok_eq;
 
+    const EXAMPLE: &str = include_str!("../inputs/example-3.txt");
+
     #[test]
     fn test() {
-        assert_ok_eq!(calc_rates(include_str!("../inputs/example-3.txt")), (22, 9));
+        assert_ok_eq!(calc_rates(EXAMPLE), (22, 9));
     }
 }

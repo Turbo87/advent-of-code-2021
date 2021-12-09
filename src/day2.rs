@@ -1,6 +1,8 @@
 use anyhow::{anyhow, Context};
 use std::str::FromStr;
 
+const INPUT: &str = include_str!("../inputs/input-2.txt");
+
 #[derive(Debug)]
 enum Action {
     Forward(u32),
@@ -28,14 +30,14 @@ impl FromStr for Action {
 }
 
 pub fn run() -> anyhow::Result<()> {
-    let (horizontal, depth) = calc_position(include_str!("../inputs/input-2.txt"))?;
+    let (horizontal, depth) = calc_position(INPUT)?;
     dbg!(horizontal);
     dbg!(depth);
 
     let result_1 = horizontal * depth;
     dbg!(result_1);
 
-    let (horizontal, depth) = calc_position2(include_str!("../inputs/input-2.txt"))?;
+    let (horizontal, depth) = calc_position2(INPUT)?;
     dbg!(horizontal);
     dbg!(depth);
 
@@ -89,19 +91,15 @@ mod tests {
     use super::{calc_position, calc_position2};
     use claim::assert_ok_eq;
 
+    const EXAMPLE: &str = include_str!("../inputs/example-2.txt");
+
     #[test]
     fn part_1() {
-        assert_ok_eq!(
-            calc_position(include_str!("../inputs/example-2.txt")),
-            (15, 10)
-        );
+        assert_ok_eq!(calc_position(EXAMPLE), (15, 10));
     }
 
     #[test]
     fn part_2() {
-        assert_ok_eq!(
-            calc_position2(include_str!("../inputs/example-2.txt")),
-            (15, 60)
-        );
+        assert_ok_eq!(calc_position2(EXAMPLE), (15, 60));
     }
 }

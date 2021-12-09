@@ -2,13 +2,13 @@ use anyhow::Context;
 use itertools::Itertools;
 use std::num::ParseIntError;
 
-pub fn run() -> anyhow::Result<()> {
-    let input = include_str!("../inputs/input-1.txt");
+const INPUT: &str = include_str!("../inputs/input-1.txt");
 
-    let result_1 = count_increases(input)?;
+pub fn run() -> anyhow::Result<()> {
+    let result_1 = count_increases(INPUT)?;
     dbg!(result_1);
 
-    let result_2 = count_increases2(input)?;
+    let result_2 = count_increases2(INPUT)?;
     dbg!(result_2);
 
     Ok(())
@@ -49,13 +49,15 @@ mod tests {
     use super::{count_increases, count_increases2};
     use claim::assert_ok_eq;
 
+    const EXAMPLE: &str = include_str!("../inputs/example-1.txt");
+
     #[test]
     fn part1() {
-        assert_ok_eq!(count_increases(include_str!("../inputs/example-1.txt")), 7);
+        assert_ok_eq!(count_increases(EXAMPLE), 7);
     }
 
     #[test]
     fn part2() {
-        assert_ok_eq!(count_increases2(include_str!("../inputs/example-1.txt")), 5);
+        assert_ok_eq!(count_increases2(EXAMPLE), 5);
     }
 }

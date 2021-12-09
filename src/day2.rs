@@ -12,19 +12,17 @@ impl FromStr for Action {
     type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if let Some((command, num)) = s.split_once(' ') {
-            let num = num.parse()?;
+        let (command, num) = s
+            .split_once(' ')
+            .ok_or_else(|| anyhow!("Missing space delimiter"))?;
 
-            let command = match command {
-                "forward" => Self::Forward(num),
-                "up" => Self::Up(num),
-                "down" => Self::Down(num),
-                _ => return Err(anyhow!("Unknown command: {}", command)),
-            };
+        let num = num.parse()?;
 
-            Ok(command)
-        } else {
-            Err(anyhow!("Missing space delimiter"))
+        match command {
+            "forward" => Ok(Self::Forward(num)),
+            "up" => Ok(Self::Up(num)),
+            "down" => Ok(Self::Down(num)),
+            _ => Err(anyhow!("Unknown command: {}", command)),
         }
     }
 }

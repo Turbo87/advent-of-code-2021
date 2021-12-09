@@ -6,3 +6,8 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+anyhow = "=1.0.51"
+itertools = "=0.10.3"
+
+[dev-dependencies]
+claim = "=0.5.0"

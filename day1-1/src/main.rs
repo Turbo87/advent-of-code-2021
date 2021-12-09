@@ -1,21 +1,40 @@
-fn main() {
-    let num_increases = count_increases(include_str!("input.txt"));
+use anyhow::Context;
+use itertools::Itertools;
+use std::num::ParseIntError;
+
+fn main() -> anyhow::Result<()> {
+    let num_increases = count_increases(include_str!("input.txt"))?;
     println!(
         "the number of times a depth measurement increases: {}",
         num_increases
     );
+
+    Ok(())
 }
 
-fn count_increases(input: &str) -> u32 {
-    let heights: Vec<u32> = input.lines().map(|line| line.parse().unwrap()).collect();
-
-    heights
-        .windows(2)
-        .map(|window| if window[1] > window[0] { 1 } else { 0 })
-        .sum()
+fn parse(input: &str) -> Result<Vec<u32>, ParseIntError> {
+    input.lines().map(|line| line.parse()).collect()
 }
 
-#[test]
-fn test() {
-    assert_eq!(count_increases(include_str!("example.txt")), 7);
+pub fn count_increases(input: &str) -> anyhow::Result<usize> {
+    let lines = parse(input).context("Failed to parse input")?;
+
+    let increases = lines
+        .into_iter()
+        .tuple_windows()
+        .filter(|(a, b)| b > a)
+        .count();
+
+    Ok(increases)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::count_increases;
+    use claim::assert_ok_eq;
+
+    #[test]
+    fn test() {
+        assert_ok_eq!(count_increases(include_str!("example.txt")), 7);
+    }
 }

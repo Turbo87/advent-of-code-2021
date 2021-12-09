@@ -12,26 +12,19 @@ impl FromStr for Action {
     type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if let Some(num) = s.strip_prefix("forward ") {
-            let num = num
-                .parse()
-                .context("Failed to parse action argument as number")?;
+        if let Some((command, num)) = s.split_once(' ') {
+            let num = num.parse()?;
 
-            Ok(Self::Forward(num))
-        } else if let Some(num) = s.strip_prefix("up ") {
-            let num = num
-                .parse()
-                .context("Failed to parse action argument as number")?;
+            let command = match command {
+                "forward" => Self::Forward(num),
+                "up" => Self::Up(num),
+                "down" => Self::Down(num),
+                _ => return Err(anyhow!("Unknown command: {}", command)),
+            };
 
-            Ok(Self::Up(num))
-        } else if let Some(num) = s.strip_prefix("down ") {
-            let num = num
-                .parse()
-                .context("Failed to parse action argument as number")?;
-
-            Ok(Self::Down(num))
+            Ok(command)
         } else {
-            Err(anyhow!("Failed to parse action"))
+            Err(anyhow!("Missing space delimiter"))
         }
     }
 }
@@ -59,7 +52,10 @@ fn calc_position(input: &str) -> anyhow::Result<(u32, u32)> {
     let mut depth = 0;
 
     for line in input.lines() {
-        let action: Action = line.parse()?;
+        let action: Action = line
+            .parse()
+            .with_context(|| format!("Failed to parse action: {}", line))?;
+
         match action {
             Action::Forward(num) => horizontal += num,
             Action::Down(num) => depth += num,

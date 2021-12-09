@@ -45,7 +45,7 @@ fn calc_rates(input: &str) -> anyhow::Result<(u32, u32)> {
         .iter()
         .map(|counter| if counter.ones > counter.zeros { 1 } else { 0 })
         .fold((0, 0), |(gamma, epsilon), x| {
-            ((gamma << 1) | x, (epsilon << 1) | (!x & 0b1))
+            ((gamma << 1) | x, (epsilon << 1) | (1 - x))
         });
 
     Ok((gamma, epsilon))

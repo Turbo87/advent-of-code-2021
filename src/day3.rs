@@ -19,44 +19,37 @@ fn calc_rates(input: &str) -> anyhow::Result<(u32, u32)> {
         .next()
         .ok_or_else(|| anyhow!("Failed to read first line"))?;
 
-    let mut num_lines = 0;
-    let mut ones = vec![0; first_line.len()];
+    #[derive(Default, Copy, Clone)]
+    struct Counter {
+        zeros: usize,
+        ones: usize,
+    }
+
+    let mut counters = vec![Counter::default(); first_line.len()];
 
     for line in input.lines() {
         for (index, char) in line.chars().enumerate() {
-            if char == '1' {
-                ones[index] += 1;
+            let mut counter = counters
+                .get_mut(index)
+                .ok_or_else(|| anyhow!("Unexpected line length: {}", line))?;
+
+            if char == '0' {
+                counter.zeros += 1;
+            } else if char == '1' {
+                counter.ones += 1;
             }
         }
-
-        num_lines += 1;
     }
 
-    let gamma = ones
+    let gamma = counters
         .iter()
-        .map(|num_ones| {
-            if num_ones > &(num_lines - num_ones) {
-                1
-            } else {
-                0
-            }
-        })
-        .enumerate()
-        .map(|(index, digit)| digit << (ones.len() - index - 1))
-        .sum();
+        .map(|counter| if counter.ones > counter.zeros { 1 } else { 0 })
+        .fold(0u32, |acc, x| acc << 1 | x);
 
-    let epsilon = ones
+    let epsilon = counters
         .iter()
-        .map(|num_ones| {
-            if num_ones > &(num_lines - num_ones) {
-                0
-            } else {
-                1
-            }
-        })
-        .enumerate()
-        .map(|(index, digit)| digit << (ones.len() - index - 1))
-        .sum();
+        .map(|counter| if counter.ones > counter.zeros { 0 } else { 1 })
+        .fold(0u32, |acc, x| acc << 1 | x);
 
     Ok((gamma, epsilon))
 }

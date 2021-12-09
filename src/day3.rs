@@ -44,12 +44,12 @@ fn calc_rates(input: &str) -> anyhow::Result<(u32, u32)> {
     let gamma = counters
         .iter()
         .map(|counter| if counter.ones > counter.zeros { 1 } else { 0 })
-        .fold(0, |acc, x| acc << 1 | x);
+        .fold(0, |acc, x| (acc << 1) | x);
 
     let epsilon = counters
         .iter()
         .map(|counter| if counter.ones > counter.zeros { 0 } else { 1 })
-        .fold(0, |acc, x| acc << 1 | x);
+        .fold(0, |acc, x| (acc << 1) | x);
 
     Ok((gamma, epsilon))
 }

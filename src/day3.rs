@@ -1,15 +1,12 @@
 use anyhow::anyhow;
 
-#[cfg(test)]
-use claim::assert_ok_eq;
-
-fn main() -> anyhow::Result<()> {
-    let (gamma, epsilon) = calc_rates(include_str!("input.txt"))?;
+pub fn run() -> anyhow::Result<()> {
+    let (gamma, epsilon) = calc_rates(include_str!("../inputs/input-3.txt"))?;
     dbg!(gamma);
     dbg!(epsilon);
 
-    let solution = gamma * epsilon;
-    dbg!(solution);
+    let result_1 = gamma * epsilon;
+    dbg!(result_1);
 
     Ok(())
 }
@@ -62,7 +59,13 @@ fn calc_rates(input: &str) -> anyhow::Result<(u32, u32)> {
     Ok((gamma, epsilon))
 }
 
-#[test]
-fn test() {
-    assert_ok_eq!(calc_rates(include_str!("example.txt")), (22, 9));
+#[cfg(test)]
+mod tests {
+    use claim::assert_ok_eq;
+    use super::calc_rates;
+
+    #[test]
+    fn test() {
+        assert_ok_eq!(calc_rates(include_str!("../inputs/example-3.txt")), (22, 9));
+    }
 }

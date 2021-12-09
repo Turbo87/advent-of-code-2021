@@ -61,8 +61,8 @@ fn calc_rates(input: &str) -> anyhow::Result<(u32, u32)> {
 
 #[cfg(test)]
 mod tests {
-    use claim::assert_ok_eq;
     use super::calc_rates;
+    use claim::assert_ok_eq;
 
     #[test]
     fn test() {
